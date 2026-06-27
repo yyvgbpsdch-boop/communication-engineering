@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通信工学 試験対策ノート</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css">
+<style>
+:root {
+  --bg:#080d1a; --surface:#0f1629; --surface2:#1a2236; --border:#1e2d47;
+  --cyan:#22d3ee; --green:#4ade80; --orange:#fb923c; --purple:#a78bfa; --red:#f87171;
+  --text:#e2e8f0; --dim:#94a3b8; --muted:#4b5675;
+  --mono:'Share Tech Mono',monospace; --sans:'Noto Sans JP',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:210px;min-width:210px;background:var(--surface);border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border)}
+.sb-logo{padding:20px 16px 14px;border-bottom:1px solid var(--border)}
+.sb-logo .tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--cyan);margin-bottom:4px}
+.sb-logo h2{font-size:15px;font-weight:700;color:var(--text);line-height:1.3}
+.nav-group{padding:12px 0 6px}
+.nav-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);padding:0 14px 4px;text-transform:uppercase}
+a.nav-item{display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:13px;color:var(--dim);
+  cursor:pointer;border-left:2px solid transparent;text-decoration:none;transition:all .15s}
+a.nav-item:hover,a.nav-item.active{color:var(--text);background:rgba(34,211,238,.06);border-left-color:var(--cyan)}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0}
+a.nav-item:hover .nav-dot,a.nav-item.active .nav-dot{background:var(--cyan)}
+.sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--muted)}
+
+/* MAIN */
+.main{margin-left:210px;flex:1;max-width:100%}
+
+/* PROGRESS */
+.prog-bar-wrap{position:sticky;top:0;z-index:50;background:rgba(8,13,26,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);padding:10px 48px;display:flex;align-items:center;gap:14px}
+.prog-label{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+.prog-track{flex:1;height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--cyan);width:0%;transition:width .4s ease;border-radius:2px}
+.prog-pct{font-family:var(--mono);font-size:11px;color:var(--cyan);white-space:nowrap}
+
+/* HERO */
+.hero{padding:56px 48px 44px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero-wave{position:absolute;right:0;top:0;bottom:0;width:360px;pointer-events:none}
+.hero-badge{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--cyan);margin-bottom:10px}
+.hero h1{font-size:40px;font-weight:700;line-height:1.1;margin-bottom:10px;
+  background:linear-gradient(135deg,#e2e8f0 0%,#64748b 100%);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:var(--dim);font-size:14px;max-width:460px;margin-bottom:28px}
+.hero-stats{display:flex;gap:28px;flex-wrap:wrap}
+.stat-num{font-family:var(--mono);font-size:30px;color:var(--cyan);font-weight:bold;line-height:1}
+.stat-lbl{font-size:11px;color:var(--muted)}
+
+/* SECTION */
+.section{padding:44px 48px 36px;border-bottom:1px solid var(--border)}
+.s-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:4px}
+.section>h2{font-size:24px;font-weight:700;color:var(--text);margin-bottom:18px}
+.section h3{font-size:16px;font-weight:600;color:var(--cyan);margin:24px 0 10px;
+  padding-bottom:6px;border-bottom:1px solid var(--border)}
+.section p{color:var(--dim);margin-bottom:10px}
+.section ul{color:var(--dim);padding-left:20px;margin-bottom:10px}
+.section ul li{margin-bottom:4px}
+strong{color:var(--text)}
+
+/* FORMULA CARD */
+.formula-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--orange);
+  border-radius:8px;padding:18px 22px;margin:14px 0;overflow-x:auto}
+.formula-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--orange);margin-bottom:8px}
+.formula-card .katex-display{margin:6px 0}
+
+/* INFO BOX */
+.info-box{border-radius:8px;padding:14px 18px;margin:14px 0}
+.info-box.cyan{background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.2)}
+.info-box.green{background:rgba(74,222,128,.05);border:1px solid rgba(74,222,128,.2)}
+.info-box.orange{background:rgba(251,146,60,.05);border:1px solid rgba(251,146,60,.2)}
+.info-box h4{font-size:13px;font-weight:600;margin-bottom:6px}
+.info-box.cyan h4{color:var(--cyan)}
+.info-box.green h4{color:var(--green)}
+.info-box.orange h4{color:var(--orange)}
+.info-box p{margin-bottom:0}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0}
+
+/* MINI CARD */
+.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px}
+.mini-card .mini-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+.mini-card .mini-val{font-family:var(--mono);font-size:18px;color:var(--cyan);margin-bottom:4px}
+.mini-card .mini-desc{font-size:12px;color:var(--dim)}
+
+/* TABLE */
+table.styled{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+table.styled th{background:var(--surface2);padding:10px 14px;text-align:left;
+  font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:1px;border-bottom:1px solid var(--border)}
+table.styled td{padding:10px 14px;border-bottom:1px solid rgba(30,45,71,.5);color:var(--dim)}
+table.styled tr:hover td{background:rgba(34,211,238,.02)}
+table.styled td.mono{font-family:var(--mono);font-size:13px}
+table.styled td.hl{color:var(--text);font-weight:500}
+
+/* BLOCK DIAGRAM */
+.block-diag{display:flex;align-items:center;flex-wrap:wrap;gap:0;padding:16px 0;overflow-x:auto}
+.blk{background:var(--surface2);border:1px solid var(--border);border-radius:6px;
+  padding:10px 14px;font-size:12px;text-align:center;min-width:72px;flex-shrink:0}
+.blk.hl{border-color:var(--cyan);background:rgba(34,211,238,.07)}
+.arr{color:var(--muted);padding:0 6px;font-size:16px;flex-shrink:0;align-self:center}
+.blk-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
+.blk-label{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* DERIVATION TOGGLE */
+.deriv-btn{background:none;border:1px solid var(--border);color:var(--dim);
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:5px 12px;
+  border-radius:4px;cursor:pointer;transition:all .15s;margin-top:10px}
+.deriv-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.deriv-content{display:none;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:16px 20px;margin-top:8px;font-size:13px;color:var(--dim)}
+.deriv-content.open{display:block}
+.deriv-content p{margin-bottom:8px;color:var(--dim)}
+
+/* STEPS */
+ol.steps{list-style:none;counter-reset:stp;padding:0;margin:10px 0}
+ol.steps li{counter-increment:stp;padding:8px 0 8px 40px;position:relative;
+  border-bottom:1px solid rgba(30,45,71,.4);color:var(--dim);font-size:14px}
+ol.steps li::before{content:counter(stp,decimal-leading-zero);position:absolute;left:0;top:8px;
+  font-family:var(--mono);font-size:10px;color:var(--cyan);width:30px}
+
+/* QUIZ */
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.quiz-header h2{font-size:24px;font-weight:700}
+.quiz-reset{background:none;border:1px solid var(--border);color:var(--dim);
+  font-family:var(--mono);font-size:10px;padding:6px 14px;border-radius:6px;cursor:pointer;
+  letter-spacing:1px;transition:all .15s}
+.quiz-reset:hover{border-color:var(--red);color:var(--red)}
+.quiz-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:22px;margin:16px 0;transition:border-color .2s}
+.quiz-card:hover{border-color:rgba(34,211,238,.2)}
+.quiz-meta{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.qnum{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.badge{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:100px}
+.b-easy{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.3)}
+.b-med{background:rgba(251,146,60,.1);color:var(--orange);border:1px solid rgba(251,146,60,.3)}
+.b-hard{background:rgba(167,139,250,.1);color:var(--purple);border:1px solid rgba(167,139,250,.3)}
+.b-topic{background:rgba(34,211,238,.07);color:var(--cyan);border:1px solid rgba(34,211,238,.2)}
+.quiz-q{font-size:15px;color:var(--text);margin-bottom:14px;line-height:1.8}
+.opts{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.opt{background:var(--surface2);border:1px solid var(--border);border-radius:7px;
+  padding:10px 16px;cursor:pointer;font-size:14px;color:var(--dim);transition:all .15s;
+  text-align:left;width:100%}
+.opt:hover:not(:disabled){border-color:var(--cyan);color:var(--text)}
+.opt.correct{border-color:var(--green)!important;background:rgba(74,222,128,.1);color:var(--green)!important}
+.opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.1);color:var(--red)!important}
+.opt:disabled{cursor:default}
+.num-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.num-in{background:var(--surface2);border:1px solid var(--border);color:var(--text);
+  font-family:var(--mono);font-size:15px;padding:8px 14px;border-radius:6px;width:150px;transition:border-color .15s}
+.num-in:focus{outline:none;border-color:var(--cyan)}
+.num-unit{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.btn-check{background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);color:var(--cyan);
+  font-family:var(--mono);font-size:11px;padding:8px 16px;border-radius:6px;cursor:pointer;
+  letter-spacing:1px;transition:all .15s}
+.btn-check:hover{background:rgba(34,211,238,.2)}
+.btn-show{background:none;border:1px solid var(--border);color:var(--muted);
+  font-family:var(--mono);font-size:10px;padding:6px 12px;border-radius:6px;cursor:pointer;transition:all .15s}
+.btn-show:hover{border-color:var(--dim);color:var(--dim)}
+.q-ans{display:none;background:var(--surface2);border:1px solid rgba(34,211,238,.15);
+  border-radius:8px;padding:14px 18px;margin-top:10px;font-size:13px;color:var(--dim)}
+.q-ans.show{display:block}
+.q-ans strong{color:var(--cyan);font-family:var(--mono)}
+.q-feedback{font-family:var(--mono);font-size:11px;margin-top:6px}
+.q-feedback.ok{color:var(--green)}
+.q-feedback.ng{color:var(--red)}
+
+/* CHEAT SHEET BUTTON */
+.cheat-btn{position:fixed;bottom:24px;right:24px;background:var(--cyan);color:var(--bg);
+  font-family:var(--mono);font-size:11px;font-weight:bold;padding:10px 18px;border-radius:24px;
+  cursor:pointer;border:none;letter-spacing:1px;box-shadow:0 4px 20px rgba(34,211,238,.3);
+  z-index:200;transition:transform .15s,box-shadow .15s}
+.cheat-btn:hover{transform:scale(1.04);box-shadow:0 6px 28px rgba(34,211,238,.45)}
+
+/* CHEAT SHEET MODAL */
+.cheat-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;
+  align-items:center;justify-content:center;padding:20px}
+.cheat-overlay.open{display:flex}
+.cheat-modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:28px;max-width:700px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
+.cheat-modal::-webkit-scrollbar{width:4px}
+.cheat-modal::-webkit-scrollbar-thumb{background:var(--border)}
+.cheat-modal h3{font-family:var(--mono);font-size:14px;color:var(--cyan);letter-spacing:2px;
+  margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.cheat-close{position:absolute;top:18px;right:20px;background:none;border:none;
+  color:var(--muted);font-size:20px;cursor:pointer;padding:4px;transition:color .15s}
+.cheat-close:hover{color:var(--red)}
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cheat-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;overflow:hidden}
+.cheat-item .c-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:6px}
+.cheat-item .c-eq{overflow-x:auto}
+.cheat-item .c-eq .katex-display{margin:2px 0;font-size:.85em}
+
+/* PHONETIC TABLE */
+.phonetic-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
+.ph-item{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:12px}
+.ph-item .ph-l{font-family:var(--mono);font-size:18px;color:var(--cyan);font-weight:bold}
+.ph-item .ph-w{color:var(--text);font-size:11px}
+.ph-item .ph-jp{color:var(--dim);font-size:10px}
+
+/* NORMAL DIST */
+.ndist-row{display:flex;align-items:center;gap:20px;margin:14px 0;flex-wrap:wrap}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .hero,.section{padding:28px 20px}
+  .prog-bar-wrap{padding:10px 20px}
+  .hero h1{font-size:28px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .cheat-grid{grid-template-columns:1fr}
+  .phonetic-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div class="tag">// TELECOM</div>
+    <h2>通信工学<br>試験対策ノート</h2>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">基礎</div>
+    <a class="nav-item" href="#s-system"><span class="nav-dot"></span>通信システム</a>
+    <a class="nav-item" href="#s-pcm"><span class="nav-dot"></span>PCM変調</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">伝送線路</div>
+    <a class="nav-item" href="#s-telegraph"><span class="nav-dot"></span>電信方程式</a>
+    <a class="nav-item" href="#s-lossless"><span class="nav-dot"></span>無損失線路</a>
+    <a class="nav-item" href="#s-reflect"><span class="nav-dot"></span>反射・整合</a>
+    <a class="nav-item" href="#s-lines"><span class="nav-dot"></span>各種線路計算</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">多重化・通信路</div>
+    <a class="nav-item" href="#s-tdm"><span class="nav-dot"></span>TDM多重化</a>
+    <a class="nav-item" href="#s-noise"><span class="nav-dot"></span>雑音と誤り率</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">練習</div>
+    <a class="nav-item" href="#s-quiz"><span class="nav-dot"></span>練習問題 (10問)</a>
+  </div>
+  <div class="sb-footer">Last updated: 2025</div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- PROGRESS -->
+<div class="prog-bar-wrap">
+  <span class="prog-label">QUIZ PROGRESS</span>
+  <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+  <span class="prog-pct" id="progPct">0 / 20</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <svg class="hero-wave" viewBox="0 0 360 200" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="wg" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#22d3ee" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.05"/>
+      </linearGradient>
+    </defs>
+    <polyline id="heroWave1" fill="none" stroke="url(#wg)" stroke-width="2"/>
+    <polyline id="heroWave2" fill="none" stroke="#4ade80" stroke-width="1" opacity="0.12"/>
+  </svg>
+  <div class="hero-badge">// COMMUNICATIONS ENGINEERING</div>
+  <h1>通信工学<br>試験対策ノート</h1>
+  <p class="hero-sub">PCM変調・電信方程式・伝送線路理論・TDM多重化・誤り率を体系的にまとめた試験直前総復習ノート</p>
+  <div class="hero-stats">
+    <div><div class="stat-num">10</div><div class="stat-lbl">学習トピック</div></div>
+    <div><div class="stat-num">30+</div><div class="stat-lbl">重要公式</div></div>
+    <div><div class="stat-num">20</div><div class="stat-lbl">練習問題</div></div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 1: システム ==================== -->
+<div class="section" id="s-system">
+  <div class="info-box green">
+  <h4>フーリエ変換の役割（周波数変換）</h4>
+  <p style="font-size:13px">
+    時間信号 \(x(t)\) を周波数成分 \(X(f)\) に分解する。無線通信において、矩形パルス（ベースバンド信号）をアンテナの共振周波数 \(f_c\) に<strong>周波数変換（搬送波乗算）</strong>するのは、<strong>信号のエネルギーを特定の「空」の周波数帯域に配置して、効率よく遠方まで電波として飛ばすため</strong>である。
+  </p>
+</div>
+  <div class="s-eyebrow">Section 01</div>
+  <h2>通信システムのモデル</h2>
+
+  <h3>シャノンの通信モデル</h3>
+  <p>通信システムは以下のブロックで構成される。ノイズは通信路（チャネル）に加わる。</p>
+  <div class="block-diag">
+    <div class="blk-wrap"><div class="blk">情報源</div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk hl">送信機<br><small>符号化・変調</small></div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap">
+      <div class="blk" style="border-color:var(--orange)">通信路<br>(チャネル)</div>
+      <div class="blk-label" style="color:var(--orange)">↑ 雑音</div>
+    </div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk hl">受信機<br><small>復調・復号化</small></div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk">受信者</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="info-box cyan">
+      <h4>有線伝送システム</h4>
+      <p style="font-size:13px">情報 → PCM変調 → <strong>通信路</strong> → PCM復調 → 情報</p>
+    </div>
+    <div class="info-box green">
+      <h4>無線伝送システム</h4>
+      <p style="font-size:13px">情報 → PCM変調 → <strong>周波数変換(0→f_c)</strong> → 電波 → <strong>周波数変換(f_c→0)</strong> → PCM復調 → 情報</p>
+    </div>
+  </div>
+
+  <h3>フォネティックコードと雑音対策</h3>
+  <p>無線通話では混信・雑音による誤解を防ぐため、各アルファベット文字を固有の単語で表す。<br>
+  例：「G, A, D」→「<strong>Golf, Alpha, Delta</strong>」</p>
+  <div class="info-box orange">
+    <h4>なぜ正確に伝わるか</h4>
+    <p style="font-size:13px">無線通話においては、文字を単体で聞き取れる割合<strong>（明瞭度）</strong>よりも、単語として聞き取れる割合<strong>（了解度）</strong>の方が大きくなる。そのため、文字だけを送話すると聞き間違いが発生する環境においても、単語を送話することで正確に伝達できる。</p>
+  </div>
+  <div class="phonetic-grid" id="phoneticGrid"></div>
+  <h2>変調（Modulation）</h2>
+
+  <h3>変調とは何か</h3>
+  <p>変調とは、情報を伝送路（送信機、通信路、受信機）に適した形態に変換すること、つまり信号変換のことである。</p>
+  <p>各々の通信路には伝送しやすい周波数帯が存在し、伝送適性も異なるため、通信路に合わせて信号を変換してあげる必要がある。</p>
+</div>
+
+<!-- ==================== SECTION 2: PCM ==================== -->
+<div class="section" id="s-pcm">
+  <div class="s-eyebrow">Section 02</div>
+  <h2>PCM（パルス符号変調）</h2>
+
+  <h3>PCMの3ステップ</h3>
+  <ol class="steps">
+    <li><strong>標本化 (Sampling)</strong>：アナログ信号を等間隔でサンプリング。ナイキスト定理により \( f_s \geq 2f_{max} \)</li>
+    <li><strong>量子化 (Quantization)</strong>：各サンプル値を \( 2^n \) 段階の離散値に丸め込む（量子化雑音が生じる）</li>
+    <li><strong>符号化 (Encoding)</strong>：各量子化値を \( n \) ビットの2進数に変換</li>
+  </ol>
+
+  <h3>重要公式</h3>
+  <div class="grid2">
+    <div class="formula-card">
+      <div class="formula-lbl">NYQUIST THEOREM</div>
+      $$ f_s \geq 2 f_{max} $$
+      <p style="font-size:12px;color:var(--dim);margin-top:6px">\(f_s\)：サンプリング周波数，\(f_{max}\)：信号最高周波数</p>
+    </div>
+    <div class="formula-card">
+      <div class="formula-lbl">BIT RATE</div>
+      $$ R_b = f_s \times n \quad \text{[bps]} $$
+      <p style="font-size:12px;color:var(--dim);margin-top:6px">\(n\)：量子化ビット数（量子化段数 \(= 2^n\)）</p>
+    </div>
+  </div>
+
+  <h3>固定電話の例（試験頻出）</h3>
+  <div class="grid3">
+    <div class="mini-card">
+      <div class="mini-lbl">音声帯域</div>
+      <div class="mini-val">4 kHz</div>
+      <div class="mini-desc">人の声の実用帯域</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-lbl">サンプリング周波数</div>
+      <div class="mini-val">8 kHz</div>
+      <div class="mini-desc">\( f_s = 2 \times 4\,\text{kHz} \)</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-lbl">量子化ビット数</div>
+      <div class="mini-val">8 bit</div>
+      <div class="mini-desc">\(2^8 = 256\) 段階</div>
+    </div>
+  </div>
+  <div class="formula-card" style="border-left-color:var(--green)">
+    <div class="formula-lbl" style="color:var(--green)">EXAMPLE · 固定電話ビットレート</div>
+    $$ R_b = 8000 \times 8 = 64{,}000 \text{ bps} = 64 \text{ kbps} $$
+  </div>
+
+  <div class="info-box orange">
+    <h4>なぜ4kHzで十分か</h4>
+    <p style="font-size:13px">人間の音声の基本周波数・主要倍音は概ね0.1~4kHz。4kHzまで伝送すれば音節の識別に十分な音声品質が得られる。このため固定電話の帯域規格は300〜3400Hzと定められている。</p>
+  </div>
+</div>
+
+<!-- ==================== SECTION 3: 電信方程式 ==================== -->
+<div class="section" id="s-telegraph">
+ 
+  <div class="s-eyebrow">Section 03</div>
+  <h2>分布定数回路と電信方程式</h2>
+
+  <h3>集中定数 vs 分布定数の使い分け</h3>
+  <div class="grid2">
+    <div class="info-box cyan">
+      <h4>集中定数回路</h4>
+      <p style="font-size:13px">線路長 \(l \ll \lambda\)（波長）のとき有効。素子の位置を無視できる。</p>
+    </div>
+    <div class="info-box orange">
+      <h4>分布定数回路</h4>
+      <p style="font-size:13px">線路長が波長に対して無視できないとき（\(l \gtrsim \lambda/10\)）。電圧・電流が位置の関数になる。</p>
+    </div>
+  </div>
+   <button class="deriv-btn" onclick="toggleDeriv('d-telegraph-derive')">▶ 電信方程式の導出詳細</button>
+  <div class="deriv-content" id="d-telegraph-derive">
+  <p>微小領域 \(dx\) における素子の振る舞いに着目する：</p>
+  <p><strong>(1) 電圧降下:</strong> 距離 \(x\) と \(x+dx\) の電位差は、直列素子 \(R, L\) による。</p>
+  $$ v(x,t) - v(x+dx,t) = iRdx + Ldx \frac{\partial i}{\partial t} $$
+  <p>Taylor展開 \(v(x+dx,t) \approx v(x,t) + \frac{\partial v}{\partial x}dx\) より：</p>
+  $$ -\frac{\partial v}{\partial x} = Ri + L \frac{\partial i}{\partial t} $$
+  <p><strong>(2) 電流変化:</strong> \(x\) と \(x+dx\) での電流差は、並列素子 \(G, C\) に流れる。</p>
+  $$ i(x,t) - i(x+dx,t) = Gvdx + Cdx \frac{\partial v}{\partial t} $$
+  $$ -\frac{\partial i}{\partial x} = Gv + C \frac{\partial v}{\partial t} $$
+  <p>これら連立微分方程式が<strong>電信方程式</strong>である。</p>
+</div>
+
+  <h3>電信方程式（時間領域）</h3>
+  <div class="formula-card">
+    <div class="formula-lbl">TELEGRAPH EQUATIONS</div>
+    $$ -\frac{\partial v}{\partial x} = R\,i + L\frac{\partial i}{\partial t} $$
+    $$ -\frac{\partial i}{\partial x} = G\,v + C\frac{\partial v}{\partial t} $$
+  </div>
+  <p>ここで \(R\)：単位長抵抗 [Ω/m]，\(L\)：単位長インダクタンス [H/m]，\(G\)：単位長コンダクタンス [S/m]，\(C\)：単位長キャパシタンス [F/m]</p>
+
+  <h3>正弦波定常状態（周波数領域）</h3>
+  <p>時間依存を \( e^{j\omega t} \) とおくと：</p>
+  <div class="formula-card">
+    <div class="formula-lbl">PHASOR FORM</div>
+    $$ -\frac{dV}{dx} = (R + j\omega L)\,I $$
+    $$ -\frac{dI}{dx} = (G + j\omega C)\,V $$
+  </div>
+
+  <button class="deriv-btn" onclick="toggleDeriv('d-phasor-derive')">▶ 周波数領域への導出を見る</button>
+  <div class="deriv-content" id="d-phasor-derive">
+    <p>正弦波が定常的に流れる状態を仮定し、電圧 $v(x,t)$ と電流 $i(x,t)$ をフェーザ表示で次のように置く。</p>
+    <p>$$v(x,t) = V(x)e^{j\omega t}$$</p>
+    <p>$$i(x,t) = I(x)e^{j\omega t}$$</p>
+    
+    <p>これらを時間 $t$ で偏微分すると、</p>
+    <p>$$\frac{\partial v}{\partial t} = j\omega V(x)e^{j\omega t}$$</p>
+    <p>$$\frac{\partial i}{\partial t} = j\omega I(x)e^{j\omega t}$$</p>
+    
+    <p>位置 $x$ で偏微分すると、</p>
+    <p>$$\frac{\partial v}{\partial x} = \frac{dV(x)}{dx}e^{j\omega t}$$</p>
+    <p>$$\frac{\partial i}{\partial x} = \frac{dI(x)}{dx}e^{j\omega t}$$</p>
+    
+    <p>これらを時間領域の電信方程式に代入すると、</p>
+    <p>$$-\frac{dV(x)}{dx}e^{j\omega t} = R I(x)e^{j\omega t} + L j\omega I(x)e^{j\omega t}$$</p>
+    <p>$$-\frac{dI(x)}{dx}e^{j\omega t} = G V(x)e^{j\omega t} + C j\omega V(x)e^{j\omega t}$$</p>
+    
+    <p>両辺を $e^{j\omega t}$ で割り、$V(x), I(x)$ を単に $V, I$ と書くと、以下の周波数領域の方程式が得られる。</p>
+    <p style="color:var(--cyan)">$$-\frac{dV}{dx} = (R + j\omega L)I$$</p>
+    <p style="color:var(--cyan)">$$-\frac{dI}{dx} = (G + j\omega C)V$$</p>
+  </div>
+
+  <h3>伝搬定数・特性インピーダンス</h3>
+  <div class="grid2">
+    <div class="formula-card">
+      <div class="formula-lbl">PROPAGATION CONSTANT</div>
+      $$ \theta = \sqrt{(R+j\omega L)(G+j\omega C)} = \alpha + j\beta $$
+      <p style="font-size:12px;color:var(--dim);margin-top:6px">\(\alpha\)：減衰定数 [Np/m]，\(\beta\)：位相定数 [rad/m]</p>
+    </div>
+    <div class="formula-card">
+      <div class="formula-lbl">CHARACTERISTIC IMPEDANCE</div>
+      $$ Z_0 = \sqrt{\frac{R+j\omega L}{G+j\omega C}} \quad [\Omega] $$
+    </div>
+  </div>
+
+  <h3>一般解</h3>
+  <div class="formula-card">
+    <div class="formula-lbl">GENERAL SOLUTION</div>
+    $$ V(x) = A e^{-\theta x} + B e^{\theta x} $$
+    $$ I(x) = \frac{1}{Z_0}\!\left(A e^{-\theta x} - B e^{\theta x}\right) $$
+    <p style="font-size:12px;color:var(--dim);margin-top:8px"><span style="color:var(--cyan)">Ae^{-γx}</span>：進行波（+x方向）　<span style="color:var(--orange)">Be^{+γx}</span>：反射波（−x方向）</p>
+  </div>
+
+  <h3>伝搬定数の意味</h3>
+  <table class="styled">
+    <tr><th>記号</th><th>名称</th><th>単位</th><th>意味</th></tr>
+    <tr><td class="mono">α</td><td>減衰定数</td><td>Np/m</td><td>波の振幅が e^{-αx} で減衰する割合</td></tr>
+    <tr><td class="mono">β</td><td>位相定数</td><td>rad/m</td><td>単位長あたりの位相遅れ。波長 λ = 2π/β</td></tr>
+    <tr><td class="mono">θ</td><td>伝搬定数</td><td>m⁻¹</td><td>γ = α + jβ，伝搬の減衰と位相を表す複素数</td></tr>
+  </table>
+</div>
+
+<!-- ==================== SECTION 4: 無損失線路 ==================== -->
+<div class="section" id="s-lossless">
+  <div class="s-eyebrow">Section 04</div>
+  <h2>無損失線路（R = 0, G = 0）</h2>
+
+  <h3>基本量の簡略化</h3>
+  <div class="grid3">
+    <div class="formula-card" style="border-left-color:var(--green)">
+      <div class="formula-lbl" style="color:var(--green)">伝搬定数</div>
+      $$ \theta = j\beta = j\omega\sqrt{LC} $$
+      <p style="font-size:12px;color:var(--dim);margin-top:4px">減衰なし（α = 0）</p>
+    </div>
+    <div class="formula-card" style="border-left-color:var(--green)">
+      <div class="formula-lbl" style="color:var(--green)">位相速度</div>
+      $$ v_p = \frac{\omega}{\beta} = \frac{1}{\sqrt{LC}} \quad \text{[m/s]} $$
+    </div>
+    <div class="formula-card" style="border-left-color:var(--green)">
+      <div class="formula-lbl" style="color:var(--green)">特性インピーダンス</div>
+      $$ Z_0 = \sqrt{\frac{L}{C}} \quad [\Omega] $$
+    </div>
+  </div>
+
+  <h3>無損失線路の一般解（正弦波）</h3>
+  <div class="formula-card">
+    <div class="formula-lbl">LOSSLESS GENERAL SOLUTION</div>
+    $$ V(x) = A e^{-j\beta x} + B e^{j\beta x} $$
+    $$ I(x) = \frac{1}{Z_0}\!\left(A e^{-j\beta x} - B e^{j\beta x}\right) $$
+  </div>
+  <p>x=0における初期条件 \(V(0)=V_S,\; I(0)=I_S\) から：</p>
+  <div class="formula-card">
+    <div class="formula-lbl">INITIAL CONDITIONS</div>
+    $$ A = \frac{V_S + Z_0 I_S}{2}, \quad B = \frac{V_S - Z_0 I_S}{2} $$
+  </div>
+
+  <h3>半無限長線路(\(x \to \infty\) で \(V \to 0\)) </h3>
+  <p>送信端から見て無限に続く線路。反射波は戻ってこないので \(B = 0\)。</p>
+  <div class="formula-card">
+    <div class="formula-lbl">SEMI-INFINITE LINE</div>
+    $$ V(x) = V_S\, e^{-\theta x}, \quad I(x) = \frac{V_S}{Z_0}\, e^{-\theta x} $$
+  </div>
+
+  <h3>終端開放線路 (\(l = \lambda/4\))</h3>
+  <p>終端 \(x=l\) で開放 → \(I(l)=0\)。無損失でγ=jβ のとき境界条件を解くと：</p>
+  <div class="formula-card">
+    <div class="formula-lbl">λ/4 OPEN-END (β l = π/2)</div>
+    $$ V(x) = V_S \frac{\cos\!\bigl(\beta(l-x)\bigr)}{\cos(\beta l)} \xrightarrow{\beta l = \pi/2} \text{特殊解} $$
+  </div>
+  <button class="deriv-btn" onclick="toggleDeriv('d-openend')">▶ 終端開放の導出を見る</button>
+  <div class="deriv-content" id="d-openend">
+    <p>開放端 \(I(l)=0\) より \(Ae^{-\gamma l} = Be^{\gamma l}\) → \(B = Ae^{-2\gamma l}\)</p>
+    <p>無損失 \(\gamma = j\beta\),\(l=\lambda/4\) → \(\beta l = \pi/2\) → \(e^{-2j\beta l} = e^{-j\pi} = -1\) → \(B=-A\)</p>
+    <p>\(V(x) = A(e^{-j\beta x} - e^{j\beta x}) = -2jA\sin(\beta x)\)</p>
+    <p>\(I(x) = \frac{A}{Z_0}(e^{-j\beta x} + e^{j\beta x}) = \frac{2A}{Z_0}\cos(\beta x)\)</p>
+    <p>x=0では \(V_S = 0\)（入力端がショートに見える）。 \(I_S = 2A/Z_0\) から \(A = I_S Z_0/2\)。</p>
+    <p style="color:var(--cyan)">∴ \(V(x) = -jZ_0 I_S \sin(\beta x)\)，\(I(x) = I_S\cos(\beta x)\)</p>
+  </div>
+
+  <h3>同軸ケーブルの特性（参考）</h3>
+  <p>同軸ケーブルは中心導体・絶縁体・外部導体の同心円構造。無損失として \(Z_0 = \sqrt{L/C}\) で計算できる。</p>
+  <div class="formula-card">
+    <div class="formula-lbl">EXAMPLE · 同軸ケーブル (1.5C-2V)</div>
+    $$ Z_0 = \sqrt{\frac{L}{C}} = \sqrt{\frac{250 \times 10^{-9}}{100 \times 10^{-12}}} = \sqrt{2500} = 50 \;\Omega $$
+  </div>
+</div>
+
+<!-- ==================== SECTION 5: 反射係数 ==================== -->
+<div class="section" id="s-reflect">
+  <div class="info-box cyan">
+  <h4>進行波と反射波の電流符号</h4>
+  <p style="font-size:13px">
+    進行波電流 \(I^+ = A/Z_0\) に対して、反射波電流 \(I^- = -B/Z_0\) となるのは、<strong>反射波が負荷からソース方向（左向き）へ流れる</strong>ため。回路図上では常に「右向き」を正の電流と定義しているため、左向きの反射波はマイナスの符号を持つ。
+  </p>
+</div>
+  <div class="s-eyebrow">Section 05</div>
+  <h2>反射係数とインピーダンス整合</h2>
+
+  <h3>電圧反射係数</h3>
+  <p>伝送線路の終端に負荷インピーダンス \(Z_L\) を接続したとき：</p>
+  <div class="formula-card">
+    <div class="formula-lbl">VOLTAGE REFLECTION COEFFICIENT</div>
+    $$ \Gamma = \frac{Z_L - Z_0}{Z_L + Z_0} $$
+  </div>
+
+  <table class="styled">
+    <tr><th>終端条件</th><th>\(Z_L\)</th><th>\(\Gamma\)</th><th>意味</th></tr>
+    <tr><td>整合終端</td><td>\(Z_0\)</td><td class="mono">0</td><td>反射なし（理想状態）</td></tr>
+    <tr><td>開放端</td><td>\(\infty\)</td><td class="mono">+1</td><td>電圧2倍，電流0</td></tr>
+    <tr><td>短絡端</td><td>0</td><td class="mono">-1</td><td>電圧0，電流2倍</td></tr>
+    <tr><td class="hl">一般終端</td><td>\(Z_L\)</td><td>\(\dfrac{Z_L-Z_0}{Z_L+Z_0}\)</td><td>\(-1 \leq |\Gamma| \leq 1\)</td></tr>
+  </table>
+
+  <h3>計算例：\(Z_0=50\,\Omega,\; Z_L=75\,\Omega\)</h3>
+  <div class="formula-card" style="border-left-color:var(--green)">
+    <div class="formula-lbl" style="color:var(--green)">EXAMPLE</div>
+    $$ \Gamma = \frac{75 - 50}{75 + 50} = \frac{25}{125} = 0.2 $$
+  </div>
+
+  <h3>アンテナとインピーダンス整合</h3>
+  <p>半波長ダイポールアンテナの入力インピーダンスは約 73Ω（実数）。給電線の \(Z_0\) と整合させると \(\Gamma \approx 0\) となり反射なく電力を効率よく放射・受信できる。整合が取れていないと反射波が生じ電力損失となる。</p>
+
+  <div class="info-box orange">
+    <h4>インピーダンス整合ネットワーク</h4>
+    <p style="font-size:13px">リアクタンス素子（\(jX\), \(-jX\)）を対称形集中定数回路として挿入することで整合を実現できる。リアクタンス素子は電力消費しないため損失なく整合できる。</p>
+  </div>
+
+  <h3>複素負荷の反射係数絶対値</h3>
+  <button class="deriv-btn" onclick="toggleDeriv('d-gamma')">▶ 複素 Z_L のときの |Γ| 計算手順</button>
+  <div class="deriv-content" id="d-gamma">
+    <p>例：\(Z_0 = 300\,\Omega\)，\(Z_L = 180 - j30\,\Omega\)</p>
+    <p>\(\Gamma = \dfrac{Z_L - Z_0}{Z_L + Z_0} = \dfrac{(180-j30)-300}{(180-j30)+300} = \dfrac{-120-j30}{480-j30}\)</p>
+    <p>分子：\(|{-120-j30}| = \sqrt{120^2+30^2} = \sqrt{14400+900} = \sqrt{15300} \approx 123.7\)</p>
+    <p>分母：\(|480-j30| = \sqrt{480^2+30^2} = \sqrt{230400+900} = \sqrt{231300} \approx 480.9\)</p>
+    <p style="color:var(--cyan)">∴ \(|\Gamma| \approx 123.7/480.9 \approx 0.257\)</p>
+  </div>
+
+  <h3>受信端から見た電圧・電流（長さ \(l\) の線路）</h3>
+  <div class="formula-card">
+    <div class="formula-lbl">SENDING-END FROM RECEIVING-END</div>
+    $$ V_S = V(l)\cosh(\gamma l) + Z_0 I(l)\sinh(\gamma l) $$
+    $$ I_S = \frac{V(l)}{Z_0}\sinh(\gamma l) + I(l)\cosh(\gamma l) $$
+  </div>
+</div>
+
+<!-- ==================== SECTION 6: 各種線路 ==================== -->
+<div class="section" id="s-lines">
+  <div class="section" id="s-antenna">
+  <div class="s-eyebrow">Section 10</div>
+  <h2>アンテナの指向性と周波数</h2>
+  
+  <h3>アンテナの共振現象</h3>
+  <p>アンテナ（λ/2ダイポールなど）は、端が開放された分布定数回路とみなせる。端での電圧が最大（腹）、電流がゼロ（節）となる<strong>定在波</strong>が形成されるときに効率よく電波が放射される。</p>
+  
+  <div class="grid2">
+    <div class="mini-card">
+      <div class="mini-lbl">800MHz帯 (プラチナバンド)</div>
+      <div class="mini-val">λ ≒ 37.5cm</div>
+      <div class="mini-desc">アンテナ長 \(\lambda/4 \approx 9.4\text{cm}\)</div>
+    </div>
+    <div class="info-box green">
+      <p style="font-size:13px"><strong>周波数が高くなると：</strong>アンテナは小型化できるが、回折しにくく「圏外」になりやすい。<br>
+      <strong>周波数が低くなると：</strong>回折性は強いが、アンテナが大型化し携帯性に不適。</p>
+    </div>
+
+  </div>
+  </div>
+  <div class="section" id="s-radio-table">
+  <h2>電波の周波数分類</h2>
+  <p>周波数が高くなるほど「情報量」が増え、「直進性」が強くなる特徴がある。</p>
+
+  <div class="info-box cyan">
+    <p>以下の分類表は試験で非常に重要。特に「3GHz(SHF) = 携帯電話・無線LAN」や「300MHz(UHF) = テレビ」といった代表的な用途は暗記しておくこと。</p>
+  </div>
+
+  <table class="styled">
+    <tr><th>周波数</th><th>名称</th><th>オーダー(波長)</th><th>主な用途</th></tr>
+    <tr><td>300GHz - 30GHz</td><td>EHF (ミリ波)</td><td>1mm - 10mm</td><td>電波天文、レーダー</td></tr>
+    <tr><td>30GHz - 3GHz</td><td>SHF (センチ波)</td><td>10mm - 100mm</td><td>衛星放送、レーダー、ETC</td></tr>
+    <tr><td>3GHz - 300MHz</td><td>UHF (極超短波)</td><td>100mm - 1m</td><td>携帯電話、Bluetooth、無線LAN、GPS、テレビ</td></tr>
+    <tr><td>300MHz - 30MHz</td><td>VHF (超短波)</td><td>1m - 10m</td><td>テレビ、FMラジオ</td></tr>
+    <tr><td>30MHz - 3MHz</td><td>HF (短波)</td><td>10m - 100m</td><td>船舶通信、短波ラジオ</td></tr>
+    <tr><td>3MHz - 300kHz</td><td>MF (中波)</td><td>100m - 1km</td><td>船舶通信、AMラジオ</td></tr>
+    <tr><td>300kHz - 30kHz</td><td>LF (長波)</td><td>1km - 10km</td><td>標準電波（電波時計）</td></tr>
+    <tr><td>30kHz - 3kHz</td><td>VLF (超長波)</td><td>10km - 100km</td><td>潜水艦通信</td></tr>
+  </table>
+  
+  <p><strong>図のポイント：</strong>左側の矢印（㊀ ㊁ ㊂）は、周波数が高くなるほど「情報量」と「直進性」が増加することを表している。</p>
+  </div>
+
+  <h2>AMとFMの決定的な違い（電波特性と設備コスト）</h2>
+
+  <div class="info-box orange">
+    <h4>Q. 変調方式以外でAMとFMが大きく異なる「あるもの」とは？</h4>
+    <p><strong>A. 「電波の伝搬特性（波長の長さ）」と、それに伴う「送信設備の規模・維持コスト」である。</strong></p>
+  </div>
+
+  <p>理論上の違いだけでなく、インフラとしての物理的な違いが放送局の経営や災害時の対応に直結している。</p>
+
+  <table class="styled">
+    <tr><th>項目</th><th>AM放送 (中波)</th><th>FM放送 (超短波)</th></tr>
+    <tr><td class="hl">電波の伝搬特性<br>(カバーエリア)</td><td>波長が長く、山や海を越えて広大なエリアをカバーできる。災害時の命綱となる。一方でビル街などでは聞こえにくい。</td><td>波長が短く直進性が高いため、起伏に富む地形（山間部など）では電波が届きにくいエリアができる。建物の影響は受けづらい。</td></tr>
+    <tr><td class="hl">送信設備と<br>維持コスト</td><td>100m超の巨大アンテナと地中の長大なアース線、広大な敷地が必要。更新には数十億円規模の莫大なコストがかかる。</td><td>鉄塔上部や山頂に小型アンテナを設置するだけで済む。更新コストは数千万円規模と桁違いに低い。</td></tr>
+  </table>
+
+  <div class="info-box cyan">
+    <h4>補足：インターネット配信（radiko等）の課題</h4>
+    <p>AM放送の代替としてネット配信も挙げられるが、実際の放送波と比較して<strong>タイムラグ（遅延）</strong>が発生するため、災害時など「緊急性を要する避難の呼びかけ」には向かないという致命的な弱点がある。</p>
+  </div>
+
+  <h3>アンテナの基本特性</h3>
+  <p>アンテナは伝送線路上の高周波電流を電波（空間への電磁波放射）に変換する素子。逆に受信時は電波を電流に変換する（可逆性）。</p>
+  <div class="grid2">
+    <div class="info-box cyan">
+      <h4>指向性（放射パターン）</h4>
+      <p style="font-size:13px">アンテナが電波を放射する強度の空間分布。半波長ダイポールは素子に<strong>垂直な面内で8の字形</strong>（トーラス状）の指向性を持ち，素子軸方向には放射しない。</p>
+       <h4>人工衛星</h4>
+      <p style="font-size:13px">人工衛星は姿勢安定前はあらゆる方向に対して等しい無指向性アンテナを使い、姿勢安定後は特定の方向に電波を放射する強い指向性アンテナを使う。 
+    </div>
+    <div class="info-box cyan">
+      <h4>利得（Gain）</h4>
+      <p style="font-size:13px">全方向均等に放射する等方性アンテナ（等方性放射体）と比較した，特定方向への放射強度の比。半波長ダイポールの利得は約 <strong>2.15 dBi</strong>。</p>
+    </div>
+  </div>
+
+  <h3>半波長ダイポールアンテナ</h3>
+  <p>全長が使用波長の半分（\(l = \lambda/2\)）の直線アンテナ。最もシンプルかつ基準となるアンテナ。</p>
+  <div class="formula-card">
+    <div class="formula-lbl">半波長ダイポールの条件</div>
+    $$ l = \frac{\lambda}{2} = \frac{c}{2f} \quad \text{[m]}$$
+    <p style="font-size:12px;color:var(--dim);margin-top:6px">\(c\)：光速 \(3\times10^8\) m/s，\(f\)：使用周波数</p>
+  </div>
+  <div class="info-box orange">
+    <h4>なぜ半波長で効率よく送受信できるか（反射係数との関係）</h4>
+    <p style="font-size:13px">
+      半波長ダイポールの入力インピーダンスは <strong>\(Z_{in} \approx 73 + j42.5\;\Omega\)</strong>（実用上は虚部を無視して \(\approx 73\;\Omega\) とみなす）。<br>
+      一般的な給電線の特性インピーダンス \(Z_0 = 75\;\Omega\) に近いため，
+      $$ \Gamma = \frac{Z_{in}-Z_0}{Z_{in}+Z_0} \approx \frac{73-75}{73+75} = \frac{-2}{148} \approx -0.014 $$
+      反射係数がほぼ 0 となり，<strong>反射なしで給電線からアンテナへ電力がほぼ全て供給</strong>される。これが効率よく送受信できる理由。整合が崩れると反射波が生じ，電力が送信機側に戻って損失となる。
+    </p>
+  </div>
+
+  <h3>VSWR（電圧定在波比）</h3>
+  <p>反射係数の大きさ \(|\Gamma|\) から整合度を表す指標。進行波と反射波の重ね合わせで生じる定在波の最大・最小電圧比。</p>
+  <div class="formula-card">
+    <div class="formula-lbl">VSWR</div>
+    $$ \text{VSWR} = \frac{1 + |\Gamma|}{1 - |\Gamma|} $$
+    <p style="font-size:12px;color:var(--dim);margin-top:6px">完全整合時 \(|\Gamma|=0\) → VSWR\(=1\)（理想）。反射が大きいほど VSWR が大きくなる。</p>
+  </div>
+  <table class="styled">
+    <tr><th>|\(\Gamma\)|</th><th>VSWR</th><th>状態</th></tr>
+    <tr><td class="mono">0</td><td class="mono hl">1.0</td><td>完全整合（反射なし）</td></tr>
+    <tr><td class="mono">0.2</td><td class="mono">1.5</td><td>良好（実用上問題なし）</td></tr>
+    <tr><td class="mono">0.5</td><td class="mono">3.0</td><td>要改善（電力の25%が反射）</td></tr>
+    <tr><td class="mono">1.0</td><td class="mono">∞</td><td>完全反射（開放または短絡）</td></tr>
+  </table>
+
+  <h3>インピーダンス整合回路</h3>
+  <p>\(Z_0\) とアンテナの入力インピーダンス \(Z_{in}\) が一致しない場合，<strong>整合回路（マッチングネットワーク）</strong>を挿入して等価的に整合させる。</p>
+  <div class="grid2">
+    <div class="info-box cyan">
+      <h4>対称形集中定数回路（L型・π型）</h4>
+      <p style="font-size:13px">リアクタンス素子 \(jX\)，\(-jX\) を組み合わせた回路を給電線とアンテナの間に挿入する。リアクタンス素子は<strong>電力を消費しない</strong>ため損失なく整合できる。</p>
+    </div>
+    <div class="info-box cyan">
+      <h4>\(\lambda/4\) 変成器</h4>
+      <p style="font-size:13px">長さ \(\lambda/4\) の伝送線路を挿入する整合法。特性インピーダンス \(Z_{0t} = \sqrt{Z_0 \cdot R_L}\) の線路を使うと純抵抗負荷 \(R_L\) と給電線 \(Z_0\) を整合できる。</p>
+    </div>
+  </div>
+
+  <button class="deriv-btn" onclick="toggleDeriv('d-matching')">▶ 対称形集中定数回路のリアクタンス X の決定法</button>
+  <div class="deriv-content" id="d-matching">
+    <p>給電線 \(Z_0\)，アンテナ入力抵抗 \(R\)，直列リアクタンス \(jX\)（対称形）を考える。</p>
+    <p>整合条件は「給電線側から見た入力インピーダンスが \(Z_0\) に等しい」こと：</p>
+    <p style="padding-left:16px">\(Z_{in} = jX + \dfrac{(-jX)\cdot R}{-jX + R} = Z_0\)</p>
+    <p>実部・虚部を分離して連立すると \(X = \pm\sqrt{Z_0(R - Z_0)}\)（\(R > Z_0\) が条件）。</p>
+    <p style="color:var(--cyan)">例：\(Z_0=60\;\Omega,\; R=120\;\Omega\) → \(X = \sqrt{60\times60} = 60\;\Omega\)</p>
+  </div>
+
+  <div class="s-eyebrow">Section 06</div>
+  <h2>各種線路の計算</h2>
+
+  <h3>平行2線式線路のインダクタンス計算</h3>
+  <p>\(Z_0 = \sqrt{L/C}\) および \(v_p = 1/\sqrt{LC}\) を連立して \(L\) のみを求める：</p>
+  <div class="formula-card">
+    <div class="formula-lbl">L FROM Z₀ AND vₚ</div>
+    $$ L = \frac{Z_0}{v_p} \quad \text{[H/m]} $$
+  </div>
+  <button class="deriv-btn" onclick="toggleDeriv('d-inductance')">▶ 計算例を見る（Z₀=50Ω, vₚ=0.83c）</button>
+  <div class="deriv-content" id="d-inductance">
+    <p>\(v_p = 0.83 \times 3.0 \times 10^8 = 2.49 \times 10^8\) m/s</p>
+    <p>\(L = \dfrac{Z_0}{v_p} = \dfrac{50}{2.49 \times 10^8} \approx 2.008 \times 10^{-7}\) H/m \(\approx 0.201\) μH/m</p>
+  </div>
+
+  <h3>減衰定数（\(R \ll \omega L,\; G=0\)）</h3>
+  <div class="formula-card">
+    <div class="formula-lbl">ATTENUATION CONSTANT (LOW-LOSS)</div>
+    $$ \alpha \approx \frac{R}{2Z_0} \quad \text{[Np/m]} $$
+    <p style="font-size:12px;color:var(--dim);margin-top:6px">ここで \(R = 2R_0\)（2本の導線の合計），\(R_0 = 0.0832\sqrt{f}/d\) [Ω/m]（表皮効果）</p>
+  </div>
+
+  <table class="styled">
+    <tr><th>変数</th><th>式</th><th>単位</th></tr>
+    <tr><td>導線1本の高周波抵抗</td><td>\(R_0 = 0.0832\sqrt{f\,[\text{MHz}]}\, /\, d\,[\text{mm}]\)</td><td>Ω/m</td></tr>
+    <tr><td>2線式の合計抵抗</td><td>\(R = 2R_0\)</td><td>Ω/m</td></tr>
+    <tr><td>減衰定数</td><td>\(\alpha \approx R/(2Z_0)\)</td><td>Np/m</td></tr>
+  </table>
+</div>
+
+<!-- ==================== SECTION 7: TDM ==================== -->
+<div class="section" id="s-tdm">
+  <div class="s-eyebrow">Section 07</div>
+  <h2>TDM（時分割多重化）</h2>
+
+  <h3>TDMの仕組み</h3>
+  <p>各回線に対して<strong>標本化1回分の符号化ビット列を送る時間スロットを順番に割り当て</strong>て多重化する。複数回線のデータをまとめた単位を<strong>フレーム</strong>という。</p>
+
+  <div class="info-box cyan">
+    <h4>フレーム構造</h4>
+    <p style="font-size:13px">1フレーム = （全回線の1サンプル分）+（フレーム同期ビット）</p>
+  </div>
+
+  <h3>伝送速度の計算手順</h3>
+  <ol class="steps">
+    <li><strong>1フレームのビット数</strong>を求める：（回線数 \(N\) × 量子化ビット数 \(n\)）＋ 同期ビット数</li>
+    <li><strong>フレームレート</strong>を求める：サンプリング周波数 \(f_s\)（フレーム/秒）</li>
+    <li><strong>伝送速度</strong> = フレームビット数 × フレームレート [bps]</li>
+  </ol>
+
+  <h3>計算例（30回線, 8bit/sample, 8kHz, 同期16bit）</h3>
+  <div class="formula-card" style="border-left-color:var(--green)">
+    <div class="formula-lbl" style="color:var(--green)">EXAMPLE · 固定電話TDM</div>
+    $$ \text{1フレーム} = 30 \times 8 + 16 = 256 \;\text{bit} $$
+    $$ R_b = 256 \times 8000 = 2{,}048{,}000 \;\text{bps} = 2.048 \;\text{Mbps} $$
+    <p style="font-size:12px;color:var(--dim);margin-top:6px">→ これが日本のディジタル電話一次群(1.5Mbps)の近似値の根拠</p>
+  </div>
+</div>
+
+<!-- ==================== SECTION 8: 有無線伝送システム ==================== -->
+<div class="section" id="s-transmission">
+  <div class="s-eyebrow">Section 08</div>
+
+
+  <h2>有線・無線伝送システムの仕組み</h2>
+ 
+  <h3>有線伝送システム</h3>
+  <p>音声などのアナログ情報をPCMでデジタル変換し，伝送線路（同軸ケーブル・光ファイバなど）で送る。<strong>周波数変換は行わず</strong>，ベースバンドのデジタル信号をそのまま伝送する。</p>
+  <div class="block-diag" style="margin-bottom:8px">
+    <div class="blk-wrap"><div class="blk">情報</div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk hl">PCM変調<br><small>標本化・量子化<br>符号化</small></div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap">
+      <div class="blk" style="border-color:var(--orange)">伝送線路<br><small>同軸・光ファイバ</small></div>
+      <div class="blk-label" style="color:var(--orange)">↑ 雑音・減衰</div>
+    </div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk hl">PCM復調<br><small>復号化・再生</small></div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk">情報</div></div>
+  </div>
+  <div class="info-box cyan">
+    <h4>有線の特徴</h4>
+    <p style="font-size:13px">ベースバンド伝送のため周波数変換不要。ただし線路の<strong>減衰（α）</strong>と<strong>位相歪み</strong>が問題となる。長距離伝送では中継器（リピータ）を設けて信号を再生する。</p>
+  </div>
+ 
+  <h3>無線伝送システム</h3>
+  <p>無線では複数の通信が同じ空間を共有するため，各通信に<strong>異なる搬送波周波数 \(f_c\)</strong> を割り当て，ベースバンド信号を高周波に変換して送信する。</p>
+  <div class="block-diag" style="flex-wrap:wrap;gap:4px 0;row-gap:0">
+    <div class="blk-wrap"><div class="blk">情報</div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk hl">PCM変調</div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap">
+      <div class="blk" style="border-color:var(--purple)">周波数変換 1<br><small>\(0 \to f_c\)</small></div>
+      <div class="blk-label" style="color:var(--purple)">変調</div>
+    </div>
+    <div class="arr">→</div>
+    <div class="blk-wrap">
+      <div class="blk" style="border-color:var(--orange)">電波<br><small>アンテナ送受信</small></div>
+      <div class="blk-label" style="color:var(--orange)">↕ 反射・回折</div>
+    </div>
+    <div class="arr">→</div>
+    <div class="blk-wrap">
+      <div class="blk" style="border-color:var(--purple)">周波数変換 2<br><small>\(f_c \to 0\)</small></div>
+      <div class="blk-label" style="color:var(--purple)">復調</div>
+    </div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk hl">PCM復調</div></div>
+    <div class="arr">→</div>
+    <div class="blk-wrap"><div class="blk">情報</div></div>
+  </div>
+ 
+  <h3>周波数変換 1（\(0 \to f_c\)）― 変調</h3>
+  <p>ベースバンドの低周波デジタル信号を，搬送波周波数 \(f_c\) の高周波信号に乗せる操作。空中を電波として伝搬させるために必要。</p>
+  <div class="grid2">
+    <div class="formula-card" style="border-left-color:var(--purple)">
+      <div class="formula-lbl" style="color:var(--purple)">振幅変調 (AM / ASK)</div>
+      $$ s(t) = A(t)\cos(2\pi f_c t) $$
+      <p style="font-size:12px;color:var(--dim);margin-top:6px">情報を振幅 \(A(t)\) に乗せる。デジタル版は ASK（振幅偏移変調）</p>
+    </div>
+    <div class="formula-card" style="border-left-color:var(--purple)">
+      <div class="formula-lbl" style="color:var(--purple)">位相変調 (PM / PSK)</div>
+      $$ s(t) = \cos\!\bigl(2\pi f_c t + \phi(t)\bigr) $$
+      <p style="font-size:12px;color:var(--dim);margin-top:6px">情報を位相 \(\phi(t)\) に乗せる。デジタル版は PSK（位相偏移変調）</p>
+    </div>
+  </div>
+  <p>いずれの方式でも，<strong>搬送波 \(\cos(2\pi f_c t)\) と信号の積（乗算）</strong>をとることが基本操作。これにより周波数スペクトルが \(f_c\) 付近にシフトする。</p>
+  <button class="deriv-btn" onclick="toggleDeriv('d-mod')">▶ なぜ乗算でスペクトルがシフトするか</button>
+  <div class="deriv-content" id="d-mod">
+    <p>信号 \(m(t) = \cos(2\pi f_0 t)\) と搬送波 \(\cos(2\pi f_c t)\) の積を展開すると：</p>
+    <p style="padding-left:16px">\(\cos(2\pi f_0 t)\cdot\cos(2\pi f_c t) = \dfrac{1}{2}\bigl[\cos 2\pi(f_c - f_0)t + \cos 2\pi(f_c + f_0)t\bigr]\)</p>
+    <p>もとの周波数 \(f_0\) の成分が，\(f_c - f_0\) と \(f_c + f_0\) の2成分に分裂してシフトする（<strong>積→和差の周波数変換</strong>）。この操作を<strong>乗算器（ミキサ）</strong>で実現する。</p>
+  </div>
+ 
+  <h3>周波数変換 2（\(f_c \to 0\)）― 復調</h3>
+  <p>受信した高周波信号からベースバンドの情報信号を取り出す。送信側と<strong>同じ周波数・位相の搬送波</strong>を受信側でも生成し，受信信号と掛け合わせてから低域フィルタ（LPF）で高周波成分を除去する。これを<strong>同期検波（コヒーレント検波）</strong>という。</p>
+  <div class="formula-card" style="border-left-color:var(--green)">
+    <div class="formula-lbl" style="color:var(--green)">同期検波の原理</div>
+    $$ r(t) \cdot \cos(2\pi f_c t) = A(t)\cos^2(2\pi f_c t) = \frac{A(t)}{2}\bigl[1 + \cos(4\pi f_c t)\bigr] $$
+    <p style="font-size:12px;color:var(--dim);margin-top:6px">LPFで \(\cos(4\pi f_c t)\) 成分を除去 → \(\dfrac{A(t)}{2}\) のみ残り，ベースバンド信号を復元</p>
+  </div>
+  <div class="info-box orange">
+    <h4>同期検波の条件</h4>
+    <p style="font-size:13px">送受信の搬送波の<strong>周波数と位相が一致</strong>していることが必要（同期）。位相がずれると復調信号に誤差が生じる。実際の受信機は PLL（位相同期ループ）などで搬送波を再生する。</p>
+  </div>
+ 
+  <h3>変調方式の比較</h3>
+  <table class="styled">
+    <tr><th>方式</th><th>変調パラメータ</th><th>デジタル版</th><th>特徴</th></tr>
+    <tr><td class="hl">AM</td><td>振幅 \(A(t)\)</td><td>ASK / OOK</td><td>回路が単純。雑音に弱い</td></tr>
+    <tr><td class="hl">FM</td><td>周波数 \(f(t)\)</td><td>FSK</td><td>雑音に強い。広い帯域が必要</td></tr>
+    <tr><td class="hl">PM</td><td>位相 \(\phi(t)\)</td><td>PSK / QPSK</td><td>帯域効率が高い。移動通信に広く使用</td></tr>
+    <tr><td class="hl">QAM</td><td>振幅＋位相</td><td>16QAM, 64QAM…</td><td>多値変調で高い帯域効率。現代の主流</td></tr>
+  </table>
+ 
+  <h3>マルチパスフェージングとその対策</h3>
+  <p>無線伝搬では電波が建物・地形などで<strong>反射・回折</strong>を繰り返し，複数の経路を通った信号が受信機に到達する（<strong>マルチパス伝搬</strong>）。</p>
+  <div class="grid2">
+    <div class="info-box orange">
+      <h4>問題：マルチパスフェージング</h4>
+      <p style="font-size:13px">経路長の違いにより各パスで位相がずれ，信号が<strong>干渉（強め合い・弱め合い）</strong>する。受信電力が大きく変動（フェージング）し，誤り率が急増する場合がある。</p>
+    </div>
+    <div class="info-box green">
+      <h4>対策</h4>
+      <p style="font-size:13px">
+       <strong>① ダイバーシチ受信</strong>：複数アンテナで受信し，最良の信号を選択<br>
+       <strong>② パイロット信号</strong>:送信側が既知のパターン（パイロット）を信号に挿入し，受信側でチャネル状態を推定・補正する。OFDMと組み合わせて4G/5G/WiFiで広く採用<br>
+       <strong>③ OFDM</strong>：搬送波を多数の細い帯域に分割し，各帯域の変動を小さくする<br>
+       <strong>④ 等化器</strong>：マルチパスによる歪みをデジタル信号処理で補正<br>
+       <strong>⑤ 誤り訂正符号</strong>：フェージングで生じたビット誤りを符号で訂正
+      </p>
+    </div>
+  </div>
+ 
+  <h3>周波数帯域と用途（参考）</h3>
+  <table class="styled">
+    <tr><th>周波数帯</th><th>名称</th><th>主な用途</th></tr>
+    <tr><td class="mono">3–30 MHz</td><td>HF（短波）</td><td>国際ラジオ放送，アマチュア無線</td></tr>
+    <tr><td class="mono">30–300 MHz</td><td>VHF</td><td>FM放送，航空管制（VOR）</td></tr>
+    <tr><td class="mono">300–3000 MHz</td><td>UHF</td><td>携帯電話，地デジ，GPS</td></tr>
+    <tr><td class="mono">3–30 GHz</td><td>SHF（マイクロ波）</td><td>衛星通信，無線LAN（WiFi）</td></tr>
+    <tr><td class="mono">30 GHz–</td><td>EHF（ミリ波）</td><td>5G（Sub6/mmWave），レーダー</td></tr>
+  </table>
+</div>
+ 
+
+<!-- ==================== SECTION 9 雑音・誤り率 ==================== -->
+<div class="section" id="s-noise">
+  <div class="s-eyebrow">Section 09</div>
+  <h2>通信路雑音と誤り率</h2>
+
+  <h3>ガウス雑音モデル</h3>
+  <p>送信振幅 \(\{-A, +A\}\) のランダムパルス信号に，平均 \(\mu = 0\)，分散 \(\sigma^2\) のガウス雑音が加わるとき，受信信号の確率密度関数は：</p>
+  <div class="formula-card">
+    <div class="formula-lbl">GAUSSIAN PDF</div>
+    $$ f(x) = \frac{1}{\sqrt{2\pi}\,\sigma} \exp\!\left[-\frac{(x - \mu)^2}{2\sigma^2}\right] $$
+    <p style="font-size:12px;color:var(--dim);margin-top:6px">+A 送信時：\(\mu = A\)，-A 送信時：\(\mu = -A\)</p>
+  </div>
+
+  <h3>誤り率（BER）の求め方</h3>
+  <p>閾値 0 で判定する場合，+Aを送信して誤判定（x&lt;0）する確率と，−Aを送信して誤判定（x&gt;0）する確率は等しく：</p>
+  <div class="formula-card">
+    <div class="formula-lbl">BIT ERROR RATE</div>
+    $$ P_e = \int_{A}^{\infty} f(x;\mu=0,\sigma)\,dx = \frac{1}{2} - p\!\left(\frac{A}{\sigma}\right) $$
+  </div>
+  <p>ここで \(p(u)\) は標準正規分布の片側面積（\(0\) から \(u\) の面積）：</p>
+  <div class="ndist-row">
+    <table class="styled" style="max-width:220px">
+      <tr><th style="color:var(--cyan)">u = A/σ</th><th>p(u)</th></tr>
+      <tr><td class="mono">0.0</td><td>0.000</td></tr>
+      <tr><td class="mono">0.5</td><td>0.191</td></tr>
+      <tr><td class="mono">1.0</td><td>0.341</td></tr>
+      <tr><td class="mono">1.5</td><td>0.433</td></tr>
+      <tr><td class="mono">2.0</td><td>0.477</td></tr>
+      <tr><td class="mono">2.5</td><td>0.494</td></tr>
+      <tr><td class="mono">3.0</td><td>0.499</td></tr>
+    </table>
+    <div>
+      <p style="font-size:13px;color:var(--dim)"><strong style="color:var(--cyan)">手順：</strong></p>
+      <ol class="steps" style="max-width:320px">
+        <li>\(u = A/\sigma\) を計算（<strong>注：σ=√σ²</strong>）</li>
+        <li>表から \(p(u)\) を読み取る</li>
+        <li>\(P_e = 0.5 - p(u)\)</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>計算例</h3>
+  <table class="styled">
+    <tr><th>A</th><th>σ²</th><th>σ</th><th>u = A/σ</th><th>p(u)</th><th class="hl">P_e</th></tr>
+    <tr><td>1</td><td>1</td><td>1</td><td>1.0</td><td>0.341</td><td class="hl">0.159</td></tr>
+    <tr><td>2</td><td>1</td><td>1</td><td>2.0</td><td>0.477</td><td class="hl">0.023</td></tr>
+    <tr><td>1</td><td>4</td><td>2</td><td>0.5</td><td>0.191</td><td class="hl">0.309</td></tr>
+    <tr><td>3</td><td>1</td><td>1</td><td>3.0</td><td>0.499</td><td class="hl">0.001</td></tr>
+  </table>
+
+  <div class="info-box orange">
+    <h4>よくある誤り：σ と σ² の混同</h4>
+    <p style="font-size:13px">\(u = A/\sigma\) であることに注意。\(\sigma^2 = 4\) なら \(\sigma = 2\)。分散 \(\sigma^2\) を直接代入しないこと。</p>
+  </div>
+</div>
+
+<!-- ==================== SECTION 10: QUIZ ==================== -->
+<div class="section" id="s-quiz">
+  <div class="quiz-header">
+    <div>
+      <div class="s-eyebrow">Section 10</div>
+      <h2>練習問題</h2>
+    </div>
+    <button class="quiz-reset" onclick="resetAll()">↺ リセット</button>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-card" id="qc1">
+    <div class="quiz-meta">
+      <span class="qnum">Q01</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">PCM</span>
+    </div>
+    <p class="quiz-q">音楽CDの音声信号は最高周波数が <strong>20 kHz</strong> である。ナイキスト定理を満たす最低サンプリング周波数として正しいものはどれか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q1',false)">① 20 kHz</button>
+      <button class="opt" onclick="mcq(this,'q1',false)">② 30 kHz</button>
+      <button class="opt" onclick="mcq(this,'q1',true)">③ 40 kHz</button>
+      <button class="opt" onclick="mcq(this,'q1',false)">④ 80 kHz</button>
+    </div>
+    <div class="q-ans" id="qa1">
+      <strong>答え：③ 40 kHz</strong><br>
+      ナイキスト定理：\(f_s \geq 2f_{max} = 2 \times 20 = 40\) kHz<br>
+      実際のCD規格は <strong>44.1 kHz</strong>（余裕を持った規格）
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card" id="qc2">
+    <div class="quiz-meta">
+      <span class="qnum">Q02</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">PCM</span>
+    </div>
+    <p class="quiz-q">サンプリング周波数 <strong>16 kHz</strong>，量子化ビット数 <strong>8 bit</strong> のPCM信号の情報量は1秒あたり何 kbps か。</p>
+    <div class="num-row">
+      <input class="num-in" type="number" id="ni2" placeholder="数値を入力">
+      <span class="num-unit">kbps</span>
+      <button class="btn-check" onclick="numCheck('ni2',128,'q2','kbps')">CHECK</button>
+      <button class="btn-show" onclick="showAns('qa2')">答えを見る</button>
+    </div>
+    <div class="q-feedback" id="fb2"></div>
+    <div class="q-ans" id="qa2">
+      <strong>答え：128 kbps</strong><br>
+      \(R_b = f_s \times n = 16000 \times 8 = 128{,}000\) bps = <strong>128 kbps</strong>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card" id="qc3">
+    <div class="quiz-meta">
+      <span class="qnum">Q03</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">無損失線路</span>
+    </div>
+    <p class="quiz-q">単位長インダクタンス \(L = 400\;\text{nH/m}\)，単位長キャパシタンス \(C = 160\;\text{pF/m}\) の無損失線路の特性インピーダンス \(Z_0\) を求めよ。</p>
+    <div class="num-row">
+      <input class="num-in" type="number" id="ni3" placeholder="数値を入力">
+      <span class="num-unit">Ω</span>
+      <button class="btn-check" onclick="numCheck('ni3',50,'q3','Ω')">CHECK</button>
+      <button class="btn-show" onclick="showAns('qa3')">答えを見る</button>
+    </div>
+    <div class="q-feedback" id="fb3"></div>
+    <div class="q-ans" id="qa3">
+      <strong>答え：50 Ω</strong><br>
+      \(Z_0 = \sqrt{L/C} = \sqrt{400 \times 10^{-9}\, /\, 160 \times 10^{-12}} = \sqrt{2500} = 50\;\Omega\)
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card" id="qc4">
+    <div class="quiz-meta">
+      <span class="qnum">Q04</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">無損失線路</span>
+    </div>
+    <p class="quiz-q">Q03 と同じ無損失線路（\(L=400\;\text{nH/m},\; C=160\;\text{pF/m}\)）の位相速度は何 m/s か。 \(\times 10^8\) の係数で答えよ。</p>
+    <div class="num-row">
+      <input class="num-in" type="number" id="ni4" placeholder="数値を入力" step="0.01">
+      <span class="num-unit">× 10⁸ m/s</span>
+      <button class="btn-check" onclick="numCheckFloat('ni4',1.25,0.02,'q4')">CHECK</button>
+      <button class="btn-show" onclick="showAns('qa4')">答えを見る</button>
+    </div>
+    <div class="q-feedback" id="fb4"></div>
+    <div class="q-ans" id="qa4">
+      <strong>答え：1.25 × 10⁸ m/s</strong><br>
+      \(v_p = \dfrac{1}{\sqrt{LC}} = \dfrac{1}{\sqrt{400 \times 10^{-9} \times 160 \times 10^{-12}}} = \dfrac{1}{\sqrt{64 \times 10^{-18}}} = \dfrac{1}{8 \times 10^{-9}} = 1.25 \times 10^8\;\text{m/s}\)
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-card" id="qc5">
+    <div class="quiz-meta">
+      <span class="qnum">Q05</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">反射係数</span>
+    </div>
+    <p class="quiz-q">特性インピーダンス \(Z_0 = 50\;\Omega\) の伝送線路の終端に \(Z_L = 150\;\Omega\) の抵抗を接続したとき，電圧反射係数 \(\Gamma\) はいくらか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q5',false)">① \(\Gamma = -0.5\)</button>
+      <button class="opt" onclick="mcq(this,'q5',true)">② \(\Gamma = 0.5\)</button>
+      <button class="opt" onclick="mcq(this,'q5',false)">③ \(\Gamma = 1.0\)</button>
+      <button class="opt" onclick="mcq(this,'q5',false)">④ \(\Gamma = 0\)</button>
+    </div>
+    <div class="q-ans" id="qa5">
+      <strong>答え：② Γ = 0.5</strong><br>
+      \(\Gamma = \dfrac{Z_L - Z_0}{Z_L + Z_0} = \dfrac{150 - 50}{150 + 50} = \dfrac{100}{200} = 0.5\)
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-card" id="qc6">
+    <div class="quiz-meta">
+      <span class="qnum">Q06</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">反射係数</span>
+    </div>
+    <p class="quiz-q">特性インピーダンス \(Z_0 = 75\;\Omega\) の線路の終端を <strong>短絡</strong>（\(Z_L = 0\)）したとき，電圧反射係数はどうなるか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q6',false)">① \(\Gamma = 0\)</button>
+      <button class="opt" onclick="mcq(this,'q6',false)">② \(\Gamma = +1\)</button>
+      <button class="opt" onclick="mcq(this,'q6',true)">③ \(\Gamma = -1\)</button>
+      <button class="opt" onclick="mcq(this,'q6',false)">④ \(\Gamma = +j\)</button>
+    </div>
+    <div class="q-ans" id="qa6">
+      <strong>答え：③ Γ = −1</strong><br>
+      \(\Gamma = \dfrac{0 - 75}{0 + 75} = -1\)<br>
+      短絡端では電圧が反転して反射（電流は2倍）
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-card" id="qc7">
+    <div class="quiz-meta">
+      <span class="qnum">Q07</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">TDM</span>
+    </div>
+    <p class="quiz-q"><strong>24回線</strong>の音声信号（8 kHz サンプリング, 8 bit 量子化）をTDM多重化する。1フレームにフレーム同期用 <strong>8 bit</strong> が追加されるとき，必要最小伝送速度は何 kbps か。</p>
+    <div class="num-row">
+      <input class="num-in" type="number" id="ni7" placeholder="数値を入力">
+      <span class="num-unit">kbps</span>
+      <button class="btn-check" onclick="numCheck('ni7',1600,'q7','kbps')">CHECK</button>
+      <button class="btn-show" onclick="showAns('qa7')">答えを見る</button>
+    </div>
+    <div class="q-feedback" id="fb7"></div>
+    <div class="q-ans" id="qa7">
+      <strong>答え：1600 kbps</strong><br>
+      1フレーム = \(24 \times 8 + 8 = 200\) bit<br>
+      フレームレート = 8000 フレーム/秒<br>
+      \(R_b = 200 \times 8000 = 1{,}600{,}000\) bps = <strong>1600 kbps</strong>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-card" id="qc8">
+    <div class="quiz-meta">
+      <span class="qnum">Q08</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">誤り率</span>
+    </div>
+    <p class="quiz-q">\(A = 1,\; \sigma^2 = 1\) のとき，この通信システムの誤り率 \(P_e\) を求めよ。（標準正規分布表を参照）</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q8',false)">① \(P_e = 0.341\)</button>
+      <button class="opt" onclick="mcq(this,'q8',true)">② \(P_e = 0.159\)</button>
+      <button class="opt" onclick="mcq(this,'q8',false)">③ \(P_e = 0.477\)</button>
+      <button class="opt" onclick="mcq(this,'q8',false)">④ \(P_e = 0.023\)</button>
+    </div>
+    <div class="q-ans" id="qa8">
+      <strong>答え：② P_e = 0.159</strong><br>
+      \(\sigma = \sqrt{\sigma^2} = 1\)，\(u = A/\sigma = 1/1 = 1\)<br>
+      表より \(p(1) = 0.341\)<br>
+      \(P_e = 0.5 - 0.341 = \mathbf{0.159}\)
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-card" id="qc9">
+    <div class="quiz-meta">
+      <span class="qnum">Q09</span>
+      <span class="badge b-hard">HARD</span>
+      <span class="badge b-topic">誤り率</span>
+    </div>
+    <p class="quiz-q">\(A = 2,\; \sigma^2 = 4\) のとき，誤り率 \(P_e\) はいくらか。<br>
+    <small style="color:var(--orange)">注意：σ² と σ の違いに気をつけること</small></p>
+    <div class="num-row">
+      <input class="num-in" type="number" id="ni9" placeholder="例：0.159" step="0.001">
+      <span class="num-unit"></span>
+      <button class="btn-check" onclick="numCheckFloat('ni9',0.159,0.001,'q9')">CHECK</button>
+      <button class="btn-show" onclick="showAns('qa9')">答えを見る</button>
+    </div>
+    <div class="q-feedback" id="fb9"></div>
+    <div class="q-ans" id="qa9">
+      <strong>答え：P_e = 0.159</strong><br>
+      \(\sigma^2 = 4\) → \(\sigma = 2\)<br>
+      \(u = A/\sigma = 2/2 = 1\)<br>
+      表より \(p(1) = 0.341\)<br>
+      \(P_e = 0.5 - 0.341 = \mathbf{0.159}\)<br>
+      <span style="color:var(--orange);font-size:12px">A が2倍でもσも2倍なら誤り率は変わらない（SNR=1で同じ）</span>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-card" id="qc10">
+    <div class="quiz-meta">
+      <span class="qnum">Q10</span>
+      <span class="badge b-hard">HARD</span>
+      <span class="badge b-topic">電信方程式</span>
+    </div>
+    <p class="quiz-q">無損失線路（\(R=0,\; G=0\)）における伝搬定数 \(\gamma\) を \(\omega,\; L,\; C\) を用いて正しく表したものはどれか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q10',true)">① \(\gamma = j\omega\sqrt{LC}\)</button>
+      <button class="opt" onclick="mcq(this,'q10',false)">② \(\gamma = \omega\sqrt{LC}\)</button>
+      <button class="opt" onclick="mcq(this,'q10',false)">③ \(\gamma = j\omega\,/\!\sqrt{LC}\)</button>
+      <button class="opt" onclick="mcq(this,'q10',false)">④ \(\gamma = \sqrt{j\omega LC}\)</button>
+    </div>
+    <div class="q-ans" id="qa10">
+      <strong>答え：① γ = jω√(LC)</strong><br>
+      \(\gamma = \sqrt{(R+j\omega L)(G+j\omega C)}\)<br>
+      \(R=G=0\) を代入：\(\gamma = \sqrt{(j\omega L)(j\omega C)} = \sqrt{j^2\omega^2 LC} = \sqrt{-\omega^2 LC} = j\omega\sqrt{LC}\)<br>
+      よって \(\alpha = 0\)（減衰なし），\(\beta = \omega\sqrt{LC}\)
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-card" id="qc11">
+    <div class="quiz-meta">
+      <span class="qnum">Q11</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">アンテナ</span>
+    </div>
+    <p class="quiz-q">半波長ダイポールアンテナの全長として正しいものはどれか。ただし \(\lambda\) は使用波長とする。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q11',false)">① \(\lambda/4\)</button>
+      <button class="opt" onclick="mcq(this,'q11',true)">② \(\lambda/2\)</button>
+      <button class="opt" onclick="mcq(this,'q11',false)">③ \(\lambda\)</button>
+      <button class="opt" onclick="mcq(this,'q11',false)">④ \(2\lambda\)</button>
+    </div>
+    <div class="q-ans" id="qa11">
+      <strong>答え：② λ/2</strong><br>
+      \(l = \lambda/2 = c/(2f)\)。周波数 \(f\) が高いほど物理的に短くなる。例：1 GHz なら \(l = 3\times10^8/(2\times10^9) = 0.15\) m = 15 cm。
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-card" id="qc12">
+    <div class="quiz-meta">
+      <span class="qnum">Q12</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">アンテナ</span>
+    </div>
+    <p class="quiz-q">半波長ダイポールアンテナの入力インピーダンスの実部（近似値）として最も近いものはどれか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q12',false)">① 50 Ω</button>
+      <button class="opt" onclick="mcq(this,'q12',true)">② 73 Ω</button>
+      <button class="opt" onclick="mcq(this,'q12',false)">③ 100 Ω</button>
+      <button class="opt" onclick="mcq(this,'q12',false)">④ 300 Ω</button>
+    </div>
+    <div class="q-ans" id="qa12">
+      <strong>答え：② 73 Ω</strong><br>
+      半波長ダイポールの入力インピーダンスは \(Z_{in} \approx 73 + j42.5\;\Omega\)。実用上は虚部を無視し実部 \(\approx 73\;\Omega\) とみなす。75 Ω の給電線と近いため反射係数が小さく，効率よく給電できる。
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="quiz-card" id="qc13">
+    <div class="quiz-meta">
+      <span class="qnum">Q13</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">VSWR</span>
+    </div>
+    <p class="quiz-q">電圧反射係数の絶対値が \(|\Gamma| = 0.5\) のとき，VSWR はいくらか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q13',false)">① 1.5</button>
+      <button class="opt" onclick="mcq(this,'q13',false)">② 2.0</button>
+      <button class="opt" onclick="mcq(this,'q13',true)">③ 3.0</button>
+      <button class="opt" onclick="mcq(this,'q13',false)">④ 5.0</button>
+    </div>
+    <div class="q-ans" id="qa13">
+      <strong>答え：③ 3.0</strong><br>
+      \(\text{VSWR} = \dfrac{1 + |\Gamma|}{1 - |\Gamma|} = \dfrac{1 + 0.5}{1 - 0.5} = \dfrac{1.5}{0.5} = 3.0\)
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="quiz-card" id="qc14">
+    <div class="quiz-meta">
+      <span class="qnum">Q14</span>
+      <span class="badge b-hard">HARD</span>
+      <span class="badge b-topic">整合回路</span>
+    </div>
+    <p class="quiz-q">特性インピーダンス \(Z_0 = 60\;\Omega\) の給電線に，入力抵抗 \(R = 120\;\Omega\) のアンテナを対称形集中定数回路（リアクタンス \(\pm jX\)）で整合させるとき，\(X\) の大きさはいくらか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q14',false)">① 30 Ω</button>
+      <button class="opt" onclick="mcq(this,'q14',true)">② 60 Ω</button>
+      <button class="opt" onclick="mcq(this,'q14',false)">③ 90 Ω</button>
+      <button class="opt" onclick="mcq(this,'q14',false)">④ 120 Ω</button>
+    </div>
+    <div class="q-ans" id="qa14">
+      <strong>答え：② 60 Ω</strong><br>
+      整合条件より \(X = \sqrt{Z_0(R - Z_0)} = \sqrt{60 \times (120 - 60)} = \sqrt{60 \times 60} = 60\;\Omega\)
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="quiz-card" id="qc15">
+    <div class="quiz-meta">
+      <span class="qnum">Q15</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">変調</span>
+    </div>
+    <p class="quiz-q">AM（振幅変調）において，情報信号を乗せるパラメータはどれか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q15',false)">① 搬送波の周波数</button>
+      <button class="opt" onclick="mcq(this,'q15',false)">② 搬送波の位相</button>
+      <button class="opt" onclick="mcq(this,'q15',true)">③ 搬送波の振幅</button>
+      <button class="opt" onclick="mcq(this,'q15',false)">④ 搬送波のパルス幅</button>
+    </div>
+    <div class="q-ans" id="qa15">
+      <strong>答え：③ 搬送波の振幅</strong><br>
+      \(s(t) = A(t)\cos(2\pi f_c t)\) の \(A(t)\) に情報を乗せる。周波数 → FM，位相 → PM，パルス幅 → PWM。
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="quiz-card" id="qc16">
+    <div class="quiz-meta">
+      <span class="qnum">Q16</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">変調</span>
+    </div>
+    <p class="quiz-q">同期検波（コヒーレント検波）において，受信信号 \(r(t)\) に搬送波 \(\cos(2\pi f_c t)\) を乗算した後，ベースバンド信号を取り出すために必要な処理はどれか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q16',false)">① 高域フィルタ（HPF）</button>
+      <button class="opt" onclick="mcq(this,'q16',true)">② 低域フィルタ（LPF）</button>
+      <button class="opt" onclick="mcq(this,'q16',false)">③ バンドパスフィルタ（BPF）</button>
+      <button class="opt" onclick="mcq(this,'q16',false)">④ 微分器</button>
+    </div>
+    <div class="q-ans" id="qa16">
+      <strong>答え：② 低域フィルタ（LPF）</strong><br>
+      乗算後は \(\dfrac{A(t)}{2}[1 + \cos(4\pi f_c t)]\) となる。LPF で \(2f_c\) の高周波成分を除去すると \(A(t)/2\) だけが残り，ベースバンド信号が復元される。
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="quiz-card" id="qc17">
+    <div class="quiz-meta">
+      <span class="qnum">Q17</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">変調</span>
+    </div>
+    <p class="quiz-q">4G/5G や Wi-Fi で主に使われる多値変調方式として最も適切なものはどれか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q17',false)">① ASK（振幅偏移変調）</button>
+      <button class="opt" onclick="mcq(this,'q17',false)">② FSK（周波数偏移変調）</button>
+      <button class="opt" onclick="mcq(this,'q17',false)">③ BPSK（2値位相偏移変調）</button>
+      <button class="opt" onclick="mcq(this,'q17',true)">④ QAM（直交振幅変調）</button>
+    </div>
+    <div class="q-ans" id="qa17">
+      <strong>答え：④ QAM（直交振幅変調）</strong><br>
+      QAM は振幅と位相を組み合わせた多値変調。16QAM・64QAM・256QAM など多値化により帯域効率を高められる。OFDMと組み合わせて現代の無線通信の主流となっている。
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="quiz-card" id="qc18">
+    <div class="quiz-meta">
+      <span class="qnum">Q18</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">PCM</span>
+    </div>
+    <p class="quiz-q">量子化ビット数が \(n\) ビットのとき，量子化段数はいくつか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q18',false)">① \(n\)</button>
+      <button class="opt" onclick="mcq(this,'q18',false)">② \(2n\)</button>
+      <button class="opt" onclick="mcq(this,'q18',true)">③ \(2^n\)</button>
+      <button class="opt" onclick="mcq(this,'q18',false)">④ \(n^2\)</button>
+    </div>
+    <div class="q-ans" id="qa18">
+      <strong>答え：③ 2ⁿ</strong><br>
+      \(n\) ビットで表現できる状態数は \(2^n\)。例：8 bit → \(2^8 = 256\) 段階，16 bit → \(2^{16} = 65536\) 段階。ビット数を増やすほど量子化雑音が減少し音質が向上する。
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="quiz-card" id="qc19">
+    <div class="quiz-meta">
+      <span class="qnum">Q19</span>
+      <span class="badge b-easy">EASY</span>
+      <span class="badge b-topic">伝送線路</span>
+    </div>
+    <p class="quiz-q">無損失線路（\(R = 0,\; G = 0\)）の減衰定数 \(\alpha\) はいくらか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q19',false)">① \(\omega\sqrt{LC}\)</button>
+      <button class="opt" onclick="mcq(this,'q19',false)">② \(1/\!\sqrt{LC}\)</button>
+      <button class="opt" onclick="mcq(this,'q19',true)">③ \(0\)</button>
+      <button class="opt" onclick="mcq(this,'q19',false)">④ \(\sqrt{L/C}\)</button>
+    </div>
+    <div class="q-ans" id="qa19">
+      <strong>答え：③ 0</strong><br>
+      \(\gamma = j\beta = j\omega\sqrt{LC}\) より，実部 \(\alpha = 0\)，虚部 \(\beta = \omega\sqrt{LC}\)。減衰なしで信号が伝搬する。\(\omega\sqrt{LC}\) は位相定数 \(\beta\)，\(\sqrt{L/C}\) は特性インピーダンス \(Z_0\)。
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="quiz-card" id="qc20">
+    <div class="quiz-meta">
+      <span class="qnum">Q20</span>
+      <span class="badge b-med">MED</span>
+      <span class="badge b-topic">誤り率</span>
+    </div>
+    <p class="quiz-q">振幅 \(A\) を2倍にし，雑音の分散 \(\sigma^2\) はそのままにしたとき，誤り率 \(P_e\) はどうなるか。</p>
+    <div class="opts">
+      <button class="opt" onclick="mcq(this,'q20',false)">① 変わらない</button>
+      <button class="opt" onclick="mcq(this,'q20',true)">② 小さくなる</button>
+      <button class="opt" onclick="mcq(this,'q20',false)">③ 大きくなる</button>
+      <button class="opt" onclick="mcq(this,'q20',false)">④ 2倍になる</button>
+    </div>
+    <div class="q-ans" id="qa20">
+      <strong>答え：② 小さくなる</strong><br>
+      \(u = A/\sigma\) が2倍になるため，\(p(u)\) が大きくなり \(P_e = 0.5 - p(u)\) は小さくなる。<br>
+      例：\(A:1\to2,\;\sigma=1\) のとき \(u:1\to2\)，\(P_e: 0.159 \to 0.023\)（約1/7に減少）。
+    </div>
+  </div>
+</div><!-- end section quiz -->
+
+</div><!-- end main -->
+</div><!-- end layout -->
+
+<!-- CHEAT SHEET BUTTON -->
+<button class="cheat-btn" onclick="openCheat()">📋 公式チートシート</button>
+
+<!-- CHEAT SHEET MODAL -->
+<div class="cheat-overlay" id="cheatOverlay" onclick="closeCheatOutside(event)">
+  <div class="cheat-modal" id="cheatModal">
+    <button class="cheat-close" onclick="closeCheat()">✕</button>
+    <h3>公式チートシート // FORMULA QUICK REFERENCE</h3>
+    <div class="cheat-grid">
+      <div class="cheat-item">
+        <div class="c-lbl">NYQUIST</div>
+        <div class="c-eq">$$f_s \geq 2f_{max}$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">BIT RATE</div>
+        <div class="c-eq">$$R_b = f_s \cdot n$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">PROP. CONSTANT</div>
+        <div class="c-eq">$$\gamma = \sqrt{(R+j\omega L)(G+j\omega C)}$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">CHAR. IMPEDANCE</div>
+        <div class="c-eq">$$Z_0 = \sqrt{\frac{R+j\omega L}{G+j\omega C}}$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">LOSSLESS γ</div>
+        <div class="c-eq">$$\gamma = j\beta = j\omega\sqrt{LC}$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">LOSSLESS Z₀ &amp; vₚ</div>
+        <div class="c-eq">$$Z_0 = \sqrt{L/C},\quad v_p = 1/\sqrt{LC}$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">GENERAL SOLUTION</div>
+        <div class="c-eq">$$V = Ae^{-\gamma x}+Be^{\gamma x}$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">REFLECTION COEFF.</div>
+        <div class="c-eq">$$\Gamma = \frac{Z_L - Z_0}{Z_L + Z_0}$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">BER</div>
+        <div class="c-eq">$$P_e = 0.5 - p(A/\sigma)$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">L FROM Z₀ &amp; vₚ</div>
+        <div class="c-eq">$$L = Z_0 / v_p$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">ATTENUATION</div>
+        <div class="c-eq">$$\alpha \approx R / (2Z_0)$$</div>
+      </div>
+      <div class="cheat-item">
+        <div class="c-lbl">TDM SPEED</div>
+        <div class="c-eq">$$R = (N \cdot n + n_{sync}) \times f_s$$</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+<script>
+// ─── KaTeX RENDER ───
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left:"$$",right:"$$",display:true},
+      {left:"\\(",right:"\\)",display:false}
+    ],
+    throwOnError: false
+  });
+  initWave();
+  initPhonetic();
+  initNavSpy();
+});
+
+// ─── HERO WAVE ANIMATION ───
+function initWave() {
+  const w1 = document.getElementById('heroWave1');
+  const w2 = document.getElementById('heroWave2');
+  let t = 0;
+  function draw() {
+    const pts1 = [], pts2 = [];
+    for(let x = 0; x <= 360; x += 4) {
+      const y1 = 100 + 45*Math.sin((x/60)*Math.PI*2 - t) + 20*Math.sin((x/25)*Math.PI*2 - t*1.3);
+      const y2 = 100 + 30*Math.sin((x/40)*Math.PI*2 + t*0.7);
+      pts1.push(x+','+y1);
+      pts2.push(x+','+y2);
+    }
+    w1.setAttribute('points', pts1.join(' '));
+    w2.setAttribute('points', pts2.join(' '));
+    t += 0.03;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ─── PHONETIC ALPHABET ───
+const phonetics = [
+  ['A','Alfa','アルファ'],['B','Bravo','ブラボー'],['C','Charlie','チャーリー'],['D','Delta','デルタ'],
+  ['E','Echo','エコー'],['F','Foxtrot','フォックストロット'],['G','Golf','ゴルフ'],['H','Hotel','ホテル'],
+  ['I','India','インディア'],['J','Juliet','ジュリエット'],['K','Kilo','キロ'],['L','Lima','リマ'],
+  ['M','Mike','マイク'],['N','November','ノベンバー'],['O','Oscar','オスカー'],['P','Papa','パパ'],
+  ['Q','Quebec','ケベック'],['R','Romeo','ロミオ'],['S','Sierra','シエラ'],['T','Tango','タンゴ'],
+  ['U','Uniform','ユニフォーム'],['V','Victor','ビクター'],['W','Whiskey','ウィスキー'],['X','X-ray','エックスレイ'],
+  ['Y','Yankee','ヤンキー'],['Z','Zulu','ズールー']
+];
+function initPhonetic() {
+  const grid = document.getElementById('phoneticGrid');
+  if(!grid) return;
+  phonetics.forEach(([l,w,j])=>{
+    const d = document.createElement('div');
+    d.className='ph-item';
+    d.innerHTML=`<div class="ph-l">${l}</div><div class="ph-w">${w}</div><div class="ph-jp">${j}</div>`;
+    grid.appendChild(d);
+  });
+}
+
+// ─── QUIZ LOGIC ───
+let answered = {};
+let totalQ = 20;
+
+function updateProgress() {
+  const n = Object.keys(answered).length;
+  document.getElementById('progFill').style.width = (n/totalQ*100)+'%';
+  document.getElementById('progPct').textContent = n+' / '+totalQ;
+}
+
+function mcq(btn, qid, correct) {
+  if(answered[qid]) return;
+  answered[qid] = true;
+  const opts = btn.parentElement.querySelectorAll('.opt');
+  opts.forEach(o => {
+    o.disabled = true;
+    o.style.cursor = 'default';
+  });
+  if(correct) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    opts.forEach(o => {
+      if(o.onclick && o.onclick.toString().includes('true')) o.classList.add('correct');
+    });
+  }
+  showAns('qa'+qid.replace('q',''));
+  updateProgress();
+}
+
+function numCheck(inputId, correctVal, qid, unit) {
+  if(answered[qid]) return;
+  const val = parseFloat(document.getElementById(inputId).value);
+  const fb = document.getElementById('fb'+qid.replace('q',''));
+  if(isNaN(val)) { fb.textContent='数値を入力してください'; fb.className='q-feedback'; return; }
+  if(Math.abs(val - correctVal) < 0.5) {
+    fb.textContent = '✓ 正解！ ' + correctVal + ' ' + unit;
+    fb.className = 'q-feedback ok';
+    answered[qid] = true;
+    showAns('qa'+qid.replace('q',''));
+    updateProgress();
+  } else {
+    fb.textContent = '✗ 不正解。もう一度試してみよう。';
+    fb.className = 'q-feedback ng';
+  }
+}
+
+function numCheckFloat(inputId, correctVal, tol, qid) {
+  if(answered[qid]) return;
+  const val = parseFloat(document.getElementById(inputId).value);
+  const fb = document.getElementById('fb'+qid.replace('q',''));
+  if(isNaN(val)) { fb.textContent='数値を入力してください'; fb.className='q-feedback'; return; }
+  if(Math.abs(val - correctVal) <= tol) {
+    fb.textContent = '✓ 正解！ ' + correctVal;
+    fb.className = 'q-feedback ok';
+    answered[qid] = true;
+    showAns('qa'+qid.replace('q',''));
+    updateProgress();
+  } else {
+    fb.textContent = '✗ 不正解（ヒント：σ²と σ に注意）';
+    fb.className = 'q-feedback ng';
+  }
+}
+
+function showAns(id) {
+  const el = document.getElementById(id);
+  if(el) el.classList.add('show');
+  // Re-render math in newly shown element
+  if(typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(el, {
+      delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}],
+      throwOnError:false
+    });
+  }
+}
+
+function resetAll() {
+  answered = {};
+  updateProgress();
+  document.querySelectorAll('.opt').forEach(o => {
+    o.disabled = false;
+    o.classList.remove('correct','wrong');
+    o.style.cursor = '';
+  });
+  document.querySelectorAll('.q-ans').forEach(a => a.classList.remove('show'));
+  document.querySelectorAll('.q-feedback').forEach(f => { f.textContent=''; f.className='q-feedback'; });
+  document.querySelectorAll('.num-in').forEach(i => i.value='');
+}
+
+// ─── DERIVATION TOGGLE ───
+function toggleDeriv(id) {
+  const el = document.getElementById(id);
+  const btn = el.previousElementSibling;
+  if(el.classList.contains('open')) {
+    el.classList.remove('open');
+    btn.textContent = btn.textContent.replace('▼','▶');
+  } else {
+    el.classList.add('open');
+    btn.textContent = btn.textContent.replace('▶','▼');
+    renderMathInElement(el, {
+      delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}],
+      throwOnError:false
+    });
+  }
+}
+
+// ─── CHEAT SHEET ───
+function openCheat() {
+  document.getElementById('cheatOverlay').classList.add('open');
+  renderMathInElement(document.getElementById('cheatModal'), {
+    delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}],
+    throwOnError:false
+  });
+}
+function closeCheat() { document.getElementById('cheatOverlay').classList.remove('open'); }
+function closeCheatOutside(e) { if(e.target===document.getElementById('cheatOverlay')) closeCheat(); }
+
+// ─── NAV SPY ───
+function initNavSpy() {
+  const sections = document.querySelectorAll('.section[id]');
+  const navItems = document.querySelectorAll('a.nav-item');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        navItems.forEach(n => n.classList.remove('active'));
+        const match = document.querySelector('a.nav-item[href="#'+e.target.id+'"]');
+        if(match) match.classList.add('active');
+      }
+    });
+  }, {rootMargin:'-30% 0px -60% 0px'});
+  sections.forEach(s => obs.observe(s));
+}
+</script>
+</body>
+</html>
